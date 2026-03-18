@@ -2,16 +2,20 @@ import axios from 'axios';
 
 const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 const normalizedApiUrl = rawApiUrl ? rawApiUrl.replace(/\/+$/, '') : '';
-const API_CANDIDATES = Array.from(
-  new Set(
-    [normalizedApiUrl, 'http://127.0.0.1:8000', 'http://localhost:8000'].filter(Boolean)
-  )
-);
 const REQUEST_TIMEOUT_MS = 12000;
+
+function apiCandidates() {
+  const devFallbacks =
+    process.env.NODE_ENV === 'development'
+      ? ['http://127.0.0.1:8000', 'http://localhost:8000']
+      : [];
+
+  return Array.from(new Set([normalizedApiUrl, ...devFallbacks].filter(Boolean)));
+}
 
 async function getWithFallback<T>(path: string, config: object = {}) {
   let lastError: unknown = null;
-  for (const base of API_CANDIDATES) {
+  for (const base of apiCandidates()) {
     try {
       return await axios.get<T>(`${base}${path}`, {
         timeout: REQUEST_TIMEOUT_MS,
@@ -26,7 +30,7 @@ async function getWithFallback<T>(path: string, config: object = {}) {
 
 async function postWithFallback<T>(path: string, body: unknown) {
   let lastError: unknown = null;
-  for (const base of API_CANDIDATES) {
+  for (const base of apiCandidates()) {
     try {
       return await axios.post<T>(`${base}${path}`, body, {
         timeout: REQUEST_TIMEOUT_MS,
@@ -41,7 +45,7 @@ async function postWithFallback<T>(path: string, body: unknown) {
 
 async function deleteWithFallback(path: string) {
   let lastError: unknown = null;
-  for (const base of API_CANDIDATES) {
+  for (const base of apiCandidates()) {
     try {
       return await axios.delete(`${base}${path}`, {
         timeout: REQUEST_TIMEOUT_MS,

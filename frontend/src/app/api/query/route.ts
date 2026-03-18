@@ -4,12 +4,12 @@ const REQUEST_TIMEOUT_MS = 15000;
 function backendCandidates() {
   const raw = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || '';
   const normalized = raw ? raw.replace(/\/+$/, '') : '';
+  const devFallbacks =
+    process.env.NODE_ENV === 'development'
+      ? ['http://127.0.0.1:8000', 'http://localhost:8000']
+      : [];
 
-  return Array.from(
-    new Set(
-      [normalized, 'http://127.0.0.1:8000', 'http://localhost:8000'].filter(Boolean)
-    )
-  );
+  return Array.from(new Set([normalized, ...devFallbacks].filter(Boolean)));
 }
 
 export async function POST(request: Request) {
