@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-bg: #f7fafc;
+  --text-main: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 12% 15%, rgba(103, 232, 249, 0.2), transparent 28%),
+    radial-gradient(circle at 86% 12%, rgba(16, 185, 129, 0.12), transparent 34%),
+    var(--app-bg);
+  font-family: var(--font-display), 'Avenir Next', 'Segoe UI', sans-serif;
+}
+
+code,
+pre {
+  font-family: var(--font-mono), 'SFMono-Regular', Menlo, monospace;
+}
