@@ -60,7 +60,7 @@ class TeamDashboardAgent:
 
             self.db = firestore.client()
             self.api_key = os.getenv("TOGETHER_API_KEY")
-            self.model = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+            self.model = "mistralai/Mistral-Small-24B-Instruct-2501"
         except Exception as e:
             logger.error(f"Init error: {e}")
             raise
